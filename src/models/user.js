@@ -49,7 +49,7 @@ userSchema.statics.findByCredentials = async(email,password)=>{
     if(!user){
         throw new Error('Unable to Login 1')
     }
-    const hashPP = await bcrypt.hashSync(password, 10)
+    const hashPP = await bcrypt.hash(password, 8)
     console.log('hashed: ',hashPP)
     const isMatch = await bcrypt.compare(password, user.password)
 
@@ -64,7 +64,7 @@ userSchema.pre('save', async function(next){
     const user = this
 
     if(user.isModified('password')){
-        user.password = await bcrypt.hashSync(user.password, 10)
+        user.password = await bcrypt.hash(user.password, 8)
         console.log('hashed DB',user.password)
     }
     next()
